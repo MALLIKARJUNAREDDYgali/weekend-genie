@@ -1,4 +1,5 @@
 import WeekendPlannerForm from "@/components/WeekendPlannerForm";
+import SupabaseConnectPrompt from "@/components/SupabaseConnectPrompt";
 import heroGenieImage from "@/assets/hero-genie.jpg";
 import { Sparkles, Map, Calendar, Heart } from "lucide-react";
 
@@ -64,6 +65,7 @@ const Index = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-accent/5 rounded-3xl"></div>
             <div className="relative p-8">
               <WeekendPlannerForm />
+              <SupabaseConnectPrompt />
             </div>
           </div>
         </div>

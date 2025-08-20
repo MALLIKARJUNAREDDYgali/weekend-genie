@@ -5,7 +5,8 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, Users, IndianRupee, Sparkles } from "lucide-react";
+import { MapPin, Users, IndianRupee, Sparkles, CheckCircle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface PlannerFormData {
   budget: string;
@@ -15,6 +16,8 @@ interface PlannerFormData {
 }
 
 const WeekendPlannerForm = () => {
+  const { toast } = useToast();
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState<PlannerFormData>({
     budget: "",
     numberOfPeople: "2",
@@ -25,7 +28,18 @@ const WeekendPlannerForm = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
-    // TODO: Connect to Supabase in next step
+    
+    // Show success feedback
+    setIsSubmitted(true);
+    toast({
+      title: "✨ Planning Request Received!",
+      description: `We're ready to plan your ₹${formData.budget} adventure for ${formData.numberOfPeople} people. Connect to Supabase to generate your itinerary!`,
+    });
+    
+    // Reset form after 3 seconds
+    setTimeout(() => {
+      setIsSubmitted(false);
+    }, 3000);
   };
 
   const handleBudgetChange = (value: string) => {
@@ -139,11 +153,20 @@ const WeekendPlannerForm = () => {
           {/* Submit Button */}
           <Button
             type="submit"
-            disabled={!isFormValid}
+            disabled={!isFormValid || isSubmitted}
             className="w-full h-14 text-lg font-semibold bg-gradient-hero hover:shadow-magical transition-smooth hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
           >
-            <Sparkles className="mr-2 h-5 w-5" />
-            Plan My Weekend Adventure
+            {isSubmitted ? (
+              <>
+                <CheckCircle className="mr-2 h-5 w-5" />
+                Request Received!
+              </>
+            ) : (
+              <>
+                <Sparkles className="mr-2 h-5 w-5" />
+                Plan My Weekend Adventure
+              </>
+            )}
           </Button>
         </form>
       </CardContent>
