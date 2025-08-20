@@ -7,6 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MapPin, Users, IndianRupee, Sparkles, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import TripPlan from "./TripPlan";
 
 interface PlannerFormData {
   budget: string;
@@ -18,6 +19,7 @@ interface PlannerFormData {
 const WeekendPlannerForm = () => {
   const { toast } = useToast();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showPlan, setShowPlan] = useState(false);
   const [formData, setFormData] = useState<PlannerFormData>({
     budget: "",
     numberOfPeople: "2",
@@ -32,14 +34,16 @@ const WeekendPlannerForm = () => {
     // Show success feedback
     setIsSubmitted(true);
     toast({
-      title: "✨ Planning Request Received!",
-      description: `We're ready to plan your ₹${formData.budget} adventure for ${formData.numberOfPeople} people. Connect to Supabase to generate your itinerary!`,
+      title: "✨ Generating Your Perfect Weekend!",
+      description: `Creating AI-powered itinerary for ${formData.numberOfPeople} people with ₹${formData.budget}...`,
     });
     
-    // Reset form after 3 seconds
+    // Simulate AI generation delay, then show plan
     setTimeout(() => {
       setIsSubmitted(false);
-    }, 3000);
+      setShowPlan(true);
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }, 2000);
   };
 
   const handleBudgetChange = (value: string) => {
@@ -58,6 +62,29 @@ const WeekendPlannerForm = () => {
 
   const isBudgetValid = parseInt(formData.budget) >= 2000;
   const isFormValid = formData.budget && isBudgetValid && formData.numberOfPeople;
+
+  if (showPlan) {
+    return (
+      <div className="space-y-6">
+        <TripPlan 
+          budget={formData.budget}
+          numberOfPeople={formData.numberOfPeople}
+          destinationPreference={formData.destinationPreference}
+          surpriseMe={formData.surpriseMe}
+        />
+        <div className="text-center">
+          <Button 
+            onClick={() => setShowPlan(false)}
+            variant="outline"
+            size="lg"
+            className="transition-smooth hover:shadow-card"
+          >
+            Plan Another Trip
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Card className="w-full max-w-2xl mx-auto backdrop-blur-sm bg-gradient-card shadow-card border-0">
@@ -158,8 +185,8 @@ const WeekendPlannerForm = () => {
           >
             {isSubmitted ? (
               <>
-                <CheckCircle className="mr-2 h-5 w-5" />
-                Request Received!
+                <Sparkles className="mr-2 h-5 w-5 animate-spin" />
+                Generating Magic...
               </>
             ) : (
               <>
