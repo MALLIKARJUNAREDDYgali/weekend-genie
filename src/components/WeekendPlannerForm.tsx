@@ -8,6 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MapPin, Users, IndianRupee, Sparkles, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import TripPlan from "./TripPlan";
+import VoiceInput from "./VoiceInput";
+import TripHistory from "./TripHistory";
 
 interface PlannerFormData {
   budget: string;
@@ -31,6 +33,15 @@ const WeekendPlannerForm = () => {
     e.preventDefault();
     console.log("Form submitted:", formData);
     
+    // Save to history
+    const historyItem = {
+      id: Date.now().toString(),
+      ...formData,
+      timestamp: Date.now(),
+    };
+    const existingHistory = JSON.parse(localStorage.getItem('tripHistory') || '[]');
+    localStorage.setItem('tripHistory', JSON.stringify([historyItem, ...existingHistory].slice(0, 10)));
+    
     // Show success feedback
     setIsSubmitted(true);
     toast({
@@ -44,6 +55,16 @@ const WeekendPlannerForm = () => {
       setShowPlan(true);
       window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }, 2000);
+  };
+
+  const handleHistorySelect = (trip: any) => {
+    setFormData({
+      budget: trip.budget,
+      numberOfPeople: trip.numberOfPeople,
+      destinationPreference: trip.destinationPreference,
+      surpriseMe: trip.surpriseMe,
+    });
+    setShowPlan(true);
   };
 
   const handleBudgetChange = (value: string) => {
@@ -87,7 +108,9 @@ const WeekendPlannerForm = () => {
   }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto backdrop-blur-sm bg-gradient-card shadow-card border-0">
+    <>
+      <TripHistory onSelectTrip={handleHistorySelect} />
+      <Card className="w-full max-w-2xl mx-auto backdrop-blur-sm bg-gradient-card shadow-card border-0">
       <CardHeader className="text-center pb-6">
         <CardTitle className="text-3xl font-bold bg-gradient-hero bg-clip-text text-transparent">
           Plan Your Perfect Weekend
@@ -105,17 +128,23 @@ const WeekendPlannerForm = () => {
               <IndianRupee className="h-4 w-4 text-primary" />
               Budget (Minimum ₹2000)
             </Label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
-                ₹
-              </span>
-              <Input
-                id="budget"
-                type="text"
-                placeholder="2000"
-                value={formData.budget}
-                onChange={(e) => handleBudgetChange(e.target.value)}
-                className="pl-8 h-12 text-lg transition-smooth focus:shadow-glow"
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
+                  ₹
+                </span>
+                <Input
+                  id="budget"
+                  type="text"
+                  placeholder="2000"
+                  value={formData.budget}
+                  onChange={(e) => handleBudgetChange(e.target.value)}
+                  className="pl-8 h-12 text-lg transition-smooth focus:shadow-glow"
+                />
+              </div>
+              <VoiceInput 
+                onResult={(text) => handleBudgetChange(text)}
+                placeholder="Say your budget in rupees"
               />
             </div>
             {formData.budget && !isBudgetValid && (
@@ -149,15 +178,21 @@ const WeekendPlannerForm = () => {
               <MapPin className="h-4 w-4 text-primary" />
               Destination Preference (Optional)
             </Label>
-            <Input
-              id="destination"
-              type="text"
-              placeholder="e.g., Beach, Mountains, City, or specific place..."
-              value={formData.destinationPreference}
-              onChange={(e) => setFormData({ ...formData, destinationPreference: e.target.value })}
-              disabled={formData.surpriseMe}
-              className="h-12 text-lg transition-smooth focus:shadow-glow disabled:opacity-60"
-            />
+            <div className="flex gap-2">
+              <Input
+                id="destination"
+                type="text"
+                placeholder="e.g., Beach, Mountains, City, or specific place..."
+                value={formData.destinationPreference}
+                onChange={(e) => setFormData({ ...formData, destinationPreference: e.target.value })}
+                disabled={formData.surpriseMe}
+                className="h-12 text-lg transition-smooth focus:shadow-glow disabled:opacity-60 flex-1"
+              />
+              <VoiceInput 
+                onResult={(text) => setFormData({ ...formData, destinationPreference: text })}
+                placeholder="Say your destination preference"
+              />
+            </div>
           </div>
 
           {/* Surprise Me Checkbox */}
@@ -198,6 +233,7 @@ const WeekendPlannerForm = () => {
         </form>
       </CardContent>
     </Card>
+    </>
   );
 };
 
