@@ -45,7 +45,7 @@ const TripHistory = ({ onSelectTrip }: TripHistoryProps) => {
   }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto backdrop-blur-sm bg-gradient-card shadow-card border-0 mb-6">
+    <Card className="w-full max-w-2xl mx-auto backdrop-blur-sm bg-gradient-card shadow-card border-0 mb-6 animate-fade-in">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -64,7 +64,7 @@ const TripHistory = ({ onSelectTrip }: TripHistoryProps) => {
             {history.map((trip) => (
               <Card 
                 key={trip.id} 
-                className="cursor-pointer hover:shadow-glow transition-smooth relative group"
+                className="cursor-pointer hover:shadow-glow transition-smooth relative group animate-scale-in hover:scale-[1.02] hover:border-ocean/40"
                 onClick={() => onSelectTrip(trip)}
               >
                 <CardContent className="p-4">

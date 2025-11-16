@@ -41,16 +41,26 @@ All colors MUST be HSL.
     --border: 200 20% 90%;
     --input: 200 20% 94%;
     --ring: 210 85% 45%;
+    
+    /* Extended travel-themed colors */
+    --ocean: 200 80% 60%;
+    --sunset: 25 95% 65%;
+    --forest: 145 70% 50%;
+    --mountain: 280 70% 65%;
+    --sand: 40 60% 80%;
 
     /* Travel-themed gradients */
     --gradient-hero: linear-gradient(135deg, hsl(210 85% 45%), hsl(195 75% 55%));
     --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(200 15% 98%));
     --gradient-accent: linear-gradient(135deg, hsl(25 95% 65%), hsl(35 85% 70%));
+    --gradient-sunset: linear-gradient(135deg, hsl(25 95% 65%), hsl(40 90% 60%));
+    --gradient-ocean: linear-gradient(135deg, hsl(200 80% 60%), hsl(190 85% 55%));
     
     /* Beautiful shadows */
     --shadow-magical: 0 10px 40px -10px hsl(210 85% 45% / 0.3);
     --shadow-card: 0 4px 20px -4px hsl(215 20% 15% / 0.1);
     --shadow-glow: 0 0 30px hsl(210 85% 65% / 0.4);
+    --shadow-subtle: 0 4px 12px -2px hsl(220 20% 20% / 0.1);
 
     /* Smooth transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -103,6 +113,17 @@ All colors MUST be HSL.
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+    
+    /* Extended travel-themed colors for dark mode */
+    --ocean: 200 70% 50%;
+    --sunset: 25 85% 55%;
+    --forest: 145 60% 40%;
+    --mountain: 280 60% 55%;
+    --sand: 40 40% 60%;
+    
+    --gradient-card: linear-gradient(145deg, hsl(222.2 84% 4.9%), hsl(217.2 32.6% 10%));
+    --gradient-sunset: linear-gradient(135deg, hsl(25 85% 55%), hsl(40 80% 50%));
+    --gradient-ocean: linear-gradient(135deg, hsl(200 70% 50%), hsl(190 75% 45%));
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;

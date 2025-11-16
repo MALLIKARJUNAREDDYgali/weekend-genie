@@ -110,7 +110,7 @@ const WeekendPlannerForm = () => {
   return (
     <>
       <TripHistory onSelectTrip={handleHistorySelect} />
-      <Card className="w-full max-w-2xl mx-auto backdrop-blur-sm bg-gradient-card shadow-card border-0">
+      <Card className="w-full max-w-2xl mx-auto backdrop-blur-sm bg-gradient-card shadow-card border-0 animate-fade-in">
       <CardHeader className="text-center pb-6">
         <CardTitle className="text-3xl font-bold bg-gradient-hero bg-clip-text text-transparent">
           Plan Your Perfect Weekend
@@ -139,7 +139,7 @@ const WeekendPlannerForm = () => {
                   placeholder="2000"
                   value={formData.budget}
                   onChange={(e) => handleBudgetChange(e.target.value)}
-                  className="pl-8 h-12 text-lg transition-smooth focus:shadow-glow"
+                  className="pl-8 h-12 text-lg transition-smooth focus:shadow-glow hover:border-ocean"
                 />
               </div>
               <VoiceInput 
@@ -159,7 +159,7 @@ const WeekendPlannerForm = () => {
               Number of People
             </Label>
             <Select value={formData.numberOfPeople} onValueChange={(value) => setFormData({ ...formData, numberOfPeople: value })}>
-              <SelectTrigger className="h-12 text-lg transition-smooth focus:shadow-glow">
+              <SelectTrigger className="h-12 text-lg transition-smooth focus:shadow-glow hover:border-forest">
                 <SelectValue placeholder="Select number of people" />
               </SelectTrigger>
               <SelectContent>
@@ -186,7 +186,7 @@ const WeekendPlannerForm = () => {
                 value={formData.destinationPreference}
                 onChange={(e) => setFormData({ ...formData, destinationPreference: e.target.value })}
                 disabled={formData.surpriseMe}
-                className="h-12 text-lg transition-smooth focus:shadow-glow disabled:opacity-60 flex-1"
+                className="h-12 text-lg transition-smooth focus:shadow-glow hover:border-sunset disabled:opacity-60 flex-1"
               />
               <VoiceInput 
                 onResult={(text) => setFormData({ ...formData, destinationPreference: text })}
@@ -196,7 +196,7 @@ const WeekendPlannerForm = () => {
           </div>
 
           {/* Surprise Me Checkbox */}
-          <div className="flex items-center space-x-3 p-4 rounded-lg bg-gradient-accent/10 border border-accent/20">
+          <div className="flex items-center space-x-3 p-4 rounded-lg bg-gradient-accent/10 border border-accent/20 transition-smooth hover:shadow-subtle hover:border-mountain/40">
             <Checkbox
               id="surprise"
               checked={formData.surpriseMe}
@@ -216,7 +216,7 @@ const WeekendPlannerForm = () => {
           <Button
             type="submit"
             disabled={!isFormValid || isSubmitted}
-            className="w-full h-14 text-lg font-semibold bg-gradient-hero hover:shadow-magical transition-smooth hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
+            className="w-full h-14 text-lg font-semibold bg-gradient-hero hover:shadow-magical transition-bounce hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
           >
             {isSubmitted ? (
               <>

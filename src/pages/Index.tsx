@@ -36,7 +36,7 @@ const Index = () => {
         <div className="container mx-auto">
           <div className="grid md:grid-cols-3 gap-8 mb-16">
             <div className="text-center group">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-hero rounded-full flex items-center justify-center shadow-magical group-hover:scale-110 transition-bounce">
+            <div className="w-16 h-16 mx-auto mb-4 bg-gradient-hero rounded-full flex items-center justify-center shadow-magical group-hover:scale-110 transition-bounce group-hover:shadow-glow">
                 <Map className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Smart Destinations</h3>
@@ -44,7 +44,7 @@ const Index = () => {
             </div>
             
             <div className="text-center group">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-accent rounded-full flex items-center justify-center shadow-magical group-hover:scale-110 transition-bounce">
+              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-accent rounded-full flex items-center justify-center shadow-magical group-hover:scale-110 transition-bounce group-hover:shadow-glow">
                 <Calendar className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Complete Itineraries</h3>
@@ -52,7 +52,7 @@ const Index = () => {
             </div>
             
             <div className="text-center group">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-hero rounded-full flex items-center justify-center shadow-magical group-hover:scale-110 transition-bounce">
+              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-ocean rounded-full flex items-center justify-center shadow-magical group-hover:scale-110 transition-bounce group-hover:shadow-glow">
                 <Heart className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Local Secrets</h3>
