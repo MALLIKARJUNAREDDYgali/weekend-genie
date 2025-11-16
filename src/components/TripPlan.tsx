@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Bed, Utensils, Calendar, Star, RefreshCw, Sparkles } from "lucide-react";
+import { MapPin, Bed, Utensils, Calendar, Star, Sparkles } from "lucide-react";
 
 interface TripPlanProps {
   budget: string;
@@ -11,7 +11,6 @@ interface TripPlanProps {
 }
 
 const TripPlan = ({ budget, numberOfPeople, destinationPreference, surpriseMe }: TripPlanProps) => {
-  // Demo plan data - in real app this comes from AI
   const samplePlan = {
     destination: surpriseMe ? "Goa" : (destinationPreference || "Rishikesh"),
     summary: surpriseMe 
@@ -80,9 +79,9 @@ const TripPlan = ({ budget, numberOfPeople, destinationPreference, surpriseMe }:
   const perPersonCost = Math.floor(totalEstimate / parseInt(numberOfPeople));
 
   return (
-    <div className="space-y-6 w-full max-w-4xl mx-auto">
+    <div className="space-y-6 w-full max-w-4xl mx-auto animate-fade-in">
       {/* Header */}
-      <Card className="bg-gradient-hero text-white border-0 shadow-magical">
+      <Card className="bg-gradient-hero text-white border-0 shadow-magical transition-smooth hover:shadow-glow">
         <CardHeader className="text-center">
           <div className="flex items-center justify-center gap-2 mb-2">
             <MapPin className="h-6 w-6" />
@@ -91,7 +90,7 @@ const TripPlan = ({ budget, numberOfPeople, destinationPreference, surpriseMe }:
           <CardDescription className="text-white/90 text-lg">
             {samplePlan.summary}
           </CardDescription>
-          <div className="flex justify-center gap-4 mt-4">
+          <div className="flex justify-center gap-4 mt-4 flex-wrap">
             <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
               ₹{budget} Total Budget
             </Badge>
@@ -105,112 +104,127 @@ const TripPlan = ({ budget, numberOfPeople, destinationPreference, surpriseMe }:
         </CardHeader>
       </Card>
 
-      {/* Accommodation */}
-      <Card className="shadow-card">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Bed className="h-5 w-5 text-primary" />
-            Where to Stay
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid md:grid-cols-2 gap-4">
-            {samplePlan.accommodation.map((place, index) => (
-              <div key={index} className="p-4 rounded-lg border bg-gradient-card">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-semibold">{place.name}</h3>
-                  <div className="flex items-center gap-1">
-                    <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                    <span className="text-sm">{place.rating}</span>
-                  </div>
-                </div>
-                <p className="text-sm text-muted-foreground mb-2">{place.type}</p>
-                <p className="font-medium text-primary">{place.cost}</p>
+      {/* Where to Stay */}
+      <div>
+        <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+          <Bed className="h-6 w-6 text-ocean" />
+          Where to Stay
+        </h2>
+        <div className="grid md:grid-cols-2 gap-6">
+          <Card className="p-6 hover:shadow-glow transition-smooth hover:scale-[1.02] animate-scale-in border-ocean/20 hover:border-ocean">
+            <div className="flex justify-between items-start mb-3">
+              <h3 className="text-xl font-semibold">{samplePlan.accommodation[0].name}</h3>
+              <div className="flex items-center gap-1 text-sunset">
+                <Star className="h-4 w-4 fill-current" />
+                <span className="text-sm font-medium">{samplePlan.accommodation[0].rating}</span>
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+            </div>
+            <Badge variant="secondary" className="mb-3">{samplePlan.accommodation[0].type}</Badge>
+            <p className="text-lg font-bold text-ocean">{samplePlan.accommodation[0].cost}</p>
+          </Card>
 
-      {/* Meals */}
-      <Card className="shadow-card">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Utensils className="h-5 w-5 text-primary" />
-            Food & Dining
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <h3 className="font-semibold mb-3 flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                Day 1
-              </h3>
-              <div className="space-y-2">
-                <p><strong>Breakfast:</strong> {samplePlan.meals.day1.breakfast}</p>
-                <p><strong>Lunch:</strong> {samplePlan.meals.day1.lunch}</p>
-                <p><strong>Dinner:</strong> {samplePlan.meals.day1.dinner}</p>
+          <Card className="p-6 hover:shadow-glow transition-smooth hover:scale-[1.02] animate-scale-in border-sunset/20 hover:border-sunset">
+            <div className="flex justify-between items-start mb-3">
+              <h3 className="text-xl font-semibold">{samplePlan.accommodation[1].name}</h3>
+              <div className="flex items-center gap-1 text-sunset">
+                <Star className="h-4 w-4 fill-current" />
+                <span className="text-sm font-medium">{samplePlan.accommodation[1].rating}</span>
               </div>
             </div>
-            <div>
-              <h3 className="font-semibold mb-3 flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                Day 2
-              </h3>
-              <div className="space-y-2">
-                <p><strong>Breakfast:</strong> {samplePlan.meals.day2.breakfast}</p>
-                <p><strong>Lunch:</strong> {samplePlan.meals.day2.lunch}</p>
-                <p><strong>Dinner:</strong> {samplePlan.meals.day2.dinner}</p>
+            <Badge variant="secondary" className="mb-3">{samplePlan.accommodation[1].type}</Badge>
+            <p className="text-lg font-bold text-sunset">{samplePlan.accommodation[1].cost}</p>
+          </Card>
+        </div>
+      </div>
+
+      {/* What to Eat */}
+      <div>
+        <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+          <Utensils className="h-6 w-6 text-forest" />
+          What to Eat
+        </h2>
+        <Card className="p-6 space-y-4 hover:shadow-glow transition-smooth hover:scale-[1.02] animate-scale-in border-forest/20 hover:border-forest">
+          {/* Day 1 Meals */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <Calendar className="h-5 w-5 text-forest" />
+              <h3 className="text-xl font-semibold">Day 1</h3>
+            </div>
+            <div className="space-y-2 ml-7">
+              <div className="flex items-start gap-3">
+                <Badge variant="outline" className="mt-1">Breakfast</Badge>
+                <p className="flex-1">{samplePlan.meals.day1.breakfast}</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <Badge variant="outline" className="mt-1">Lunch</Badge>
+                <p className="flex-1">{samplePlan.meals.day1.lunch}</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <Badge variant="outline" className="mt-1">Dinner</Badge>
+                <p className="flex-1">{samplePlan.meals.day1.dinner}</p>
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+
+          {/* Day 2 Meals */}
+          <div className="pt-4 border-t">
+            <div className="flex items-center gap-2 mb-3">
+              <Calendar className="h-5 w-5 text-forest" />
+              <h3 className="text-xl font-semibold">Day 2</h3>
+            </div>
+            <div className="space-y-2 ml-7">
+              <div className="flex items-start gap-3">
+                <Badge variant="outline" className="mt-1">Breakfast</Badge>
+                <p className="flex-1">{samplePlan.meals.day2.breakfast}</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <Badge variant="outline" className="mt-1">Lunch</Badge>
+                <p className="flex-1">{samplePlan.meals.day2.lunch}</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <Badge variant="outline" className="mt-1">Dinner</Badge>
+                <p className="flex-1">{samplePlan.meals.day2.dinner}</p>
+              </div>
+            </div>
+          </div>
+        </Card>
+      </div>
 
       {/* Activities */}
-      <Card className="shadow-card">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Star className="h-5 w-5 text-primary" />
-            Activities & Experiences
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4">
-            {samplePlan.activities.map((activity, index) => (
-              <div key={index} className="p-4 rounded-lg border bg-gradient-card">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-semibold">{activity.name}</h3>
-                  <Badge variant="outline">{activity.cost}</Badge>
-                </div>
-                <p className="text-sm text-muted-foreground mb-1">{activity.time} • {activity.duration}</p>
-                <p className="text-sm">{activity.description}</p>
+      <div>
+        <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+          <Sparkles className="h-6 w-6 text-mountain" />
+          Activities & Things to Do
+        </h2>
+        <Card className="p-6 space-y-4 hover:shadow-glow transition-smooth hover:scale-[1.02] animate-scale-in border-mountain/20 hover:border-mountain">
+          {samplePlan.activities.map((activity, index) => (
+            <div key={index} className="pb-4 last:pb-0 border-b last:border-0">
+              <div className="flex justify-between items-start mb-2">
+                <h3 className="text-lg font-semibold">{activity.name}</h3>
+                <Badge variant="secondary" className="bg-mountain/10 text-mountain border-mountain/20">{activity.cost}</Badge>
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+              <p className="text-sm text-muted-foreground mb-2">{activity.description}</p>
+              <div className="flex gap-4 text-sm">
+                <span className="flex items-center gap-1">
+                  <Calendar className="h-4 w-4 text-mountain" />
+                  {activity.time}
+                </span>
+                <span className="text-muted-foreground">Duration: {activity.duration}</span>
+              </div>
+            </div>
+          ))}
+        </Card>
+      </div>
 
-      {/* Hidden Gem */}
-      <Card className="shadow-magical bg-gradient-accent/10 border-accent/20">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-accent">
-            <Sparkles className="h-5 w-5" />
-            Local Secret
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-lg">{samplePlan.optional_tip}</p>
-        </CardContent>
-      </Card>
-
-      {/* Action Buttons */}
-      <div className="flex justify-center gap-4">
-        <Button variant="outline" size="lg" className="transition-smooth hover:shadow-card">
-          <RefreshCw className="mr-2 h-4 w-4" />
-          Generate New Plan
-        </Button>
+      {/* Hidden Gem Tip */}
+      <div>
+        <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+          <Star className="h-6 w-6 text-sunset fill-current" />
+          Local Secret
+        </h2>
+        <Card className="p-6 bg-gradient-sunset/20 border-sunset/30 hover:shadow-glow transition-smooth hover:scale-[1.02] animate-scale-in hover:border-sunset">
+          <p className="text-lg leading-relaxed">{samplePlan.optional_tip}</p>
+        </Card>
       </div>
     </div>
   );
