@@ -11,69 +11,226 @@ interface TripPlanProps {
 }
 
 const TripPlan = ({ budget, numberOfPeople, destinationPreference, surpriseMe }: TripPlanProps) => {
-  const samplePlan = {
-    destination: surpriseMe ? "Goa" : (destinationPreference || "Rishikesh"),
-    summary: surpriseMe 
-      ? "A perfect beach getaway with stunning sunsets, water sports, and vibrant nightlife in India's party capital!"
-      : `An adventure-packed weekend in ${destinationPreference || "Rishikesh"} with nature, culture, and unforgettable experiences!`,
-    accommodation: [
-      {
-        name: "Cozy Beach Resort",
-        type: "Beach Resort",
-        cost: "₹1,200/night",
-        rating: 4.2
+  const getDestinationData = (destination: string) => {
+    const dest = destination.toLowerCase();
+    
+    if (dest.includes('bangalore') || dest.includes('bengaluru')) {
+      return {
+        destination: "Bangalore",
+        summary: "Explore the Garden City with its vibrant tech culture, beautiful parks, historic palaces, and amazing food scene!",
+        accommodation: [
+          { name: "The Oberoi Bangalore", type: "Luxury Hotel", cost: "₹8,000/night", rating: 4.8 },
+          { name: "Zostel Bangalore", type: "Hostel", cost: "₹600/night", rating: 4.3 }
+        ],
+        meals: {
+          day1: {
+            breakfast: "MTR - Authentic South Indian (₹250)",
+            lunch: "Vidyarthi Bhavan - Famous Dosa (₹150)",
+            dinner: "Toit - Craft Beer & Wood Fired Pizza (₹800)"
+          },
+          day2: {
+            breakfast: "Airlines Hotel - Benne Dosa (₹200)",
+            lunch: "Nagarjuna - Andhra Meals (₹350)",
+            dinner: "Truffles - American Diner (₹600)"
+          }
+        },
+        activities: [
+          {
+            name: "Lalbagh Botanical Garden",
+            time: "Day 1, 9:00 AM - 12:00 PM",
+            duration: "3 hours",
+            cost: "₹50",
+            description: "Explore 240 acres of stunning gardens and the famous Glass House"
+          },
+          {
+            name: "Bangalore Palace Tour",
+            time: "Day 1, 2:00 PM - 5:00 PM",
+            duration: "3 hours",
+            cost: "₹500",
+            description: "Tudor-style palace with opulent interiors and beautiful architecture"
+          },
+          {
+            name: "Cubbon Park & Museums",
+            time: "Day 2, 10:00 AM - 1:00 PM",
+            duration: "3 hours",
+            cost: "₹200",
+            description: "Visit Government Museum and stroll through Cubbon Park"
+          },
+          {
+            name: "MG Road Shopping & Nightlife",
+            time: "Day 2, 6:00 PM - 10:00 PM",
+            duration: "4 hours",
+            cost: "₹1,000",
+            description: "Shop at commercial street and experience Bangalore's nightlife"
+          }
+        ],
+        optional_tip: "🌟 Hidden Gem: Visit Nandi Hills at sunrise (60km away) for breathtaking views and paragliding opportunities!"
+      };
+    }
+    
+    if (dest.includes('hyderabad')) {
+      return {
+        destination: "Hyderabad",
+        summary: "Experience the City of Pearls with its rich Nizami heritage, iconic monuments, and legendary biryani!",
+        accommodation: [
+          { name: "Taj Falaknuma Palace", type: "Heritage Hotel", cost: "₹15,000/night", rating: 4.9 },
+          { name: "Backpacker Panda", type: "Hostel", cost: "₹500/night", rating: 4.2 }
+        ],
+        meals: {
+          day1: {
+            breakfast: "Ram Ki Bandi - Authentic Irani Chai (₹100)",
+            lunch: "Paradise Biryani - Hyderabadi Biryani (₹400)",
+            dinner: "Jewel of Nizam - Royal Nizami Cuisine (₹1,200)"
+          },
+          day2: {
+            breakfast: "Shadab - Haleem & Paya (₹250)",
+            lunch: "Shah Ghouse - Biryani & Kebabs (₹500)",
+            dinner: "Ohri's - Multi-cuisine (₹800)"
+          }
+        },
+        activities: [
+          {
+            name: "Charminar & Laad Bazaar",
+            time: "Day 1, 9:00 AM - 1:00 PM",
+            duration: "4 hours",
+            cost: "₹200",
+            description: "Explore the iconic monument and shop for bangles and pearls"
+          },
+          {
+            name: "Golconda Fort Sound & Light Show",
+            time: "Day 1, 4:00 PM - 8:00 PM",
+            duration: "4 hours",
+            cost: "₹300",
+            description: "Tour the historic fort and watch the spectacular evening show"
+          },
+          {
+            name: "Hussain Sagar Lake Boat Ride",
+            time: "Day 2, 9:00 AM - 12:00 PM",
+            duration: "3 hours",
+            cost: "₹150",
+            description: "Boating to Buddha statue and Tank Bund stroll"
+          },
+          {
+            name: "Ramoji Film City",
+            time: "Day 2, 2:00 PM - 7:00 PM",
+            duration: "5 hours",
+            cost: "₹1,500",
+            description: "World's largest film studio with live shows and sets"
+          }
+        ],
+        optional_tip: "🌟 Hidden Gem: Visit the serene Durgam Cheruvu (Secret Lake) for kayaking and lakeside cafes away from tourist crowds!"
+      };
+    }
+    
+    if (dest.includes('chennai')) {
+      return {
+        destination: "Chennai",
+        summary: "Discover the cultural capital of South India with beautiful beaches, ancient temples, and delicious cuisine!",
+        accommodation: [
+          { name: "Taj Coromandel", type: "Luxury Hotel", cost: "₹7,000/night", rating: 4.7 },
+          { name: "Moustache Hostel", type: "Beach Hostel", cost: "₹700/night", rating: 4.4 }
+        ],
+        meals: {
+          day1: {
+            breakfast: "Murugan Idli Shop - Soft Idlis (₹150)",
+            lunch: "Saravana Bhavan - Traditional Meals (₹250)",
+            dinner: "Bay 146 - Seafood Specialties (₹1,000)"
+          },
+          day2: {
+            breakfast: "Ratna Cafe - Filter Coffee & Vada (₹100)",
+            lunch: "Sangeetha - Pure Veg Meals (₹200)",
+            dinner: "Promenade - Rooftop Fine Dining (₹1,500)"
+          }
+        },
+        activities: [
+          {
+            name: "Marina Beach Walk & Sunrise",
+            time: "Day 1, 6:00 AM - 9:00 AM",
+            duration: "3 hours",
+            cost: "Free",
+            description: "World's second-longest beach with street food vendors"
+          },
+          {
+            name: "Kapaleeshwarar Temple & Mylapore",
+            time: "Day 1, 10:00 AM - 2:00 PM",
+            duration: "4 hours",
+            cost: "₹100",
+            description: "Ancient Dravidian temple and traditional neighborhood exploration"
+          },
+          {
+            name: "Fort St. George & Museum",
+            time: "Day 2, 9:00 AM - 12:00 PM",
+            duration: "3 hours",
+            cost: "₹200",
+            description: "First British fortress in India with colonial artifacts"
+          },
+          {
+            name: "ECR Beach Drive & Mahabalipuram",
+            time: "Day 2, 2:00 PM - 8:00 PM",
+            duration: "6 hours",
+            cost: "₹1,000",
+            description: "Scenic coastal drive to UNESCO World Heritage rock-cut temples"
+          }
+        ],
+        optional_tip: "🌟 Hidden Gem: Visit Dakshinachitra cultural village to experience traditional South Indian art, crafts, and architecture!"
+      };
+    }
+    
+    // Default for other destinations
+    return {
+      destination: surpriseMe ? "Goa" : (destinationPreference || "Rishikesh"),
+      summary: `An adventure-packed weekend in ${destinationPreference || "Rishikesh"} with nature, culture, and unforgettable experiences!`,
+      accommodation: [
+        { name: "Heritage Resort", type: "Resort", cost: "₹2,000/night", rating: 4.3 },
+        { name: "Budget Inn", type: "Hotel", cost: "₹800/night", rating: 4.0 }
+      ],
+      meals: {
+        day1: {
+          breakfast: "Local Café - Regional Breakfast (₹200)",
+          lunch: "Popular Restaurant - Local Cuisine (₹400)",
+          dinner: "Night Market - Street Food (₹300)"
+        },
+        day2: {
+          breakfast: "Hotel Buffet - Continental (₹250)",
+          lunch: "Traditional Restaurant - Regional Thali (₹350)",
+          dinner: "Rooftop Café - Multi-cuisine (₹450)"
+        }
       },
-      {
-        name: "Backpacker's Paradise",
-        type: "Hostel",
-        cost: "₹800/night",
-        rating: 4.0
-      }
-    ],
-    meals: {
-      day1: {
-        breakfast: "Local Café - Goan Breakfast (₹200)",
-        lunch: "Beachside Shack - Fresh Seafood (₹400)",
-        dinner: "Night Market - Street Food Tour (₹300)"
-      },
-      day2: {
-        breakfast: "Resort Buffet - Continental (₹250)",
-        lunch: "Portuguese Restaurant - Goan Curry (₹350)",
-        dinner: "Sunset Beach Café - BBQ Night (₹450)"
-      }
-    },
-    activities: [
-      {
-        name: "Beach Hopping & Water Sports",
-        time: "Day 1, 10:00 AM - 4:00 PM",
-        duration: "6 hours",
-        cost: "₹1,500",
-        description: "Parasailing, jet skiing, and exploring multiple beaches"
-      },
-      {
-        name: "Old Goa Heritage Tour",
-        time: "Day 1, 5:00 PM - 8:00 PM", 
-        duration: "3 hours",
-        cost: "₹500",
-        description: "Visit historic churches and colonial architecture"
-      },
-      {
-        name: "Spice Plantation Visit",
-        time: "Day 2, 9:00 AM - 2:00 PM",
-        duration: "5 hours", 
-        cost: "₹800",
-        description: "Guided tour with traditional lunch included"
-      },
-      {
-        name: "Sunset Cruise",
-        time: "Day 2, 5:00 PM - 7:00 PM",
-        duration: "2 hours",
-        cost: "₹600",
-        description: "Romantic cruise with live music and snacks"
-      }
-    ],
-    optional_tip: "🌟 Hidden Gem: Visit the secret Cola Beach for a pristine, crowd-free experience. Best reached by scooter through winding forest paths!"
+      activities: [
+        {
+          name: "Local Sightseeing Tour",
+          time: "Day 1, 9:00 AM - 1:00 PM",
+          duration: "4 hours",
+          cost: "₹800",
+          description: "Explore major attractions and landmarks"
+        },
+        {
+          name: "Cultural Experience",
+          time: "Day 1, 3:00 PM - 6:00 PM",
+          duration: "3 hours",
+          cost: "₹600",
+          description: "Visit museums, markets, and cultural sites"
+        },
+        {
+          name: "Adventure Activity",
+          time: "Day 2, 9:00 AM - 1:00 PM",
+          duration: "4 hours",
+          cost: "₹1,200",
+          description: "Outdoor activities and adventure sports"
+        },
+        {
+          name: "Shopping & Leisure",
+          time: "Day 2, 3:00 PM - 7:00 PM",
+          duration: "4 hours",
+          cost: "₹500",
+          description: "Local shopping and relaxation"
+        }
+      ],
+      optional_tip: `🌟 Hidden Gem: Explore off-the-beaten-path local spots for an authentic ${destinationPreference} experience!`
+    };
   };
+
+  const samplePlan = getDestinationData(destinationPreference || "");
 
   const totalEstimate = parseInt(budget);
   const perPersonCost = Math.floor(totalEstimate / parseInt(numberOfPeople));
