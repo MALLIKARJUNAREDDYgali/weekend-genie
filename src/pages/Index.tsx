@@ -6,6 +6,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { ProfileMenu } from "@/components/ProfileMenu";
 import { RecommendationsSection } from "@/components/RecommendationsSection";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
+import { ComparisonSlider } from "@/components/ComparisonSlider";
 import { useAuth } from "@/contexts/AuthContext";
 import heroGenieImage from "@/assets/hero-genie.jpg";
 import { Sparkles, Map, Calendar, Heart, LogIn } from "lucide-react";
@@ -200,6 +201,9 @@ const Index = () => {
 
         {/* Recommendations Section */}
         <RecommendationsSection />
+
+        {/* Comparison Slider Section */}
+        <ComparisonSlider />
 
         {/* Testimonials Section */}
         <TestimonialsSection />
