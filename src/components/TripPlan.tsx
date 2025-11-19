@@ -260,12 +260,7 @@ const TripPlan = ({ budget, numberOfPeople, destinationPreference, surpriseMe }:
     visible: { 
       opacity: 1, 
       y: 0, 
-      scale: 1,
-      transition: {
-        type: "spring" as const,
-        stiffness: 100,
-        damping: 15
-      }
+      scale: 1
     }
   };
 
