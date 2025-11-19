@@ -83,9 +83,9 @@ const VoiceInput = ({ onResult, placeholder = "Speak now..." }: VoiceInputProps)
       variant="outline"
       size="icon"
       onClick={toggleListening}
-      className={`transition-bounce hover:scale-110 ${isListening ? 'bg-destructive text-destructive-foreground animate-pulse' : 'hover:bg-ocean/10 hover:border-ocean'}`}
+      className={`transition-bounce hover:scale-110 active:scale-95 ${isListening ? 'bg-destructive text-destructive-foreground animate-pulse hover:shadow-glow' : 'hover:bg-ocean/10 hover:border-ocean hover:shadow-subtle'}`}
     >
-      {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+      {isListening ? <MicOff className="h-4 w-4 animate-bounce" /> : <Mic className="h-4 w-4" />}
     </Button>
   );
 };

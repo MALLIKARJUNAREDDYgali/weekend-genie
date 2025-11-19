@@ -52,7 +52,7 @@ const TripHistory = ({ onSelectTrip }: TripHistoryProps) => {
             <History className="h-5 w-5 text-primary" />
             <CardTitle className="text-2xl">Trip History</CardTitle>
           </div>
-          <Button variant="ghost" size="sm" onClick={clearHistory}>
+          <Button variant="ghost" size="sm" onClick={clearHistory} className="transition-bounce hover:scale-105 active:scale-95 hover:shadow-subtle">
             Clear All
           </Button>
         </div>
@@ -106,7 +106,7 @@ const TripHistory = ({ onSelectTrip }: TripHistoryProps) => {
                         e.stopPropagation();
                         deleteItem(trip.id);
                       }}
-                      className="opacity-0 group-hover:opacity-100 transition-smooth"
+                      className="opacity-0 group-hover:opacity-100 transition-bounce hover:scale-110 active:scale-90 hover:bg-destructive/10"
                     >
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
