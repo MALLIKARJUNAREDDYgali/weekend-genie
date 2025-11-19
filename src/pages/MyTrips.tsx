@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ProfileMenu } from "@/components/ProfileMenu";
+import { ProfileSidebar } from "@/components/ProfileSidebar";
 import { Loader2, MapPin, Users, IndianRupee, ArrowLeft, Sparkles, Calendar } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -100,30 +101,34 @@ const MyTrips = () => {
         </div>
       </nav>
 
-      <div className="pt-20 pb-16 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Button
-              variant="ghost"
-              onClick={() => navigate('/')}
-              className="mb-6 hover:bg-accent/50"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Home
-            </Button>
+      <div className="pt-20 pb-16 px-4 bg-gradient-to-br from-background via-background to-accent/5">
+        <div className="container mx-auto max-w-7xl">
+          <div className="flex flex-col lg:flex-row gap-8">
+            <ProfileSidebar />
+            
+            <div className="flex-1">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <Button
+                  variant="ghost"
+                  onClick={() => navigate('/')}
+                  className="mb-6 hover:bg-accent/50"
+                >
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back to Home
+                </Button>
 
-            <div className="mb-8">
-              <h1 className="text-4xl font-bold mb-2 bg-gradient-hero bg-clip-text text-transparent">
-                My Trips
-              </h1>
-              <p className="text-muted-foreground text-lg">
-                View and manage your planned adventures
-              </p>
-            </div>
+                <div className="mb-8">
+                  <h1 className="text-4xl font-bold mb-2 bg-gradient-hero bg-clip-text text-transparent">
+                    My Trips
+                  </h1>
+                  <p className="text-muted-foreground text-lg">
+                    View and manage your planned adventures
+                  </p>
+                </div>
 
             {trips.length === 0 ? (
               <motion.div
@@ -213,7 +218,9 @@ const MyTrips = () => {
                 ))}
               </motion.div>
             )}
-          </motion.div>
+              </motion.div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
