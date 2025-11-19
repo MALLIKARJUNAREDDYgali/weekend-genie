@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import WeekendPlannerForm from "@/components/WeekendPlannerForm";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ProfileMenu } from "@/components/ProfileMenu";
+import { RecommendationsSection } from "@/components/RecommendationsSection";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { useAuth } from "@/contexts/AuthContext";
 import heroGenieImage from "@/assets/hero-genie.jpg";
 import { Sparkles, Map, Calendar, Heart, LogIn } from "lucide-react";
@@ -195,6 +197,12 @@ const Index = () => {
             </motion.div>
           </div>
         </section>
+
+        {/* Recommendations Section */}
+        <RecommendationsSection />
+
+        {/* Testimonials Section */}
+        <TestimonialsSection />
 
         {/* Footer */}
         <footer className="bg-muted/50 py-8 px-4 text-center">

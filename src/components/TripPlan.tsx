@@ -1,8 +1,12 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Utensils, Hotel, Compass, Sparkles, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { MapPin, Utensils, Hotel, Compass, Sparkles, Loader2, Heart } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { ShareTripPlan } from "./ShareTripPlan";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 interface TripPlanProps {
   budget: string;
@@ -34,9 +38,12 @@ interface Activity {
 
 const TripPlan = ({ budget, numberOfPeople, destinationPreference, surpriseMe }: TripPlanProps) => {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [tripData, setTripData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isSaved, setIsSaved] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     const generateTripPlan = async () => {
@@ -89,6 +96,45 @@ const TripPlan = ({ budget, numberOfPeople, destinationPreference, surpriseMe }:
 
     generateTripPlan();
   }, [budget, numberOfPeople, destinationPreference, surpriseMe]);
+
+  const handleSaveTrip = async () => {
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to save your trips",
+      });
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      const { error } = await supabase.from('saved_trips').insert({
+        user_id: user.id,
+        destination: tripData.destination,
+        budget,
+        number_of_people: numberOfPeople,
+        trip_data: tripData,
+        is_favorite: false,
+      });
+
+      if (error) throw error;
+
+      setIsSaved(true);
+      toast({
+        title: "Trip saved! 💾",
+        description: "You can view it in My Trips section",
+      });
+    } catch (error) {
+      console.error('Error saving trip:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save trip. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -279,6 +325,40 @@ const TripPlan = ({ budget, numberOfPeople, destinationPreference, surpriseMe }:
           </CardContent>
         </Card>
       )}
+
+      {/* Share & Download */}
+      <Card className="backdrop-blur-sm bg-gradient-card shadow-card border-0">
+        <CardContent className="py-6 space-y-4">
+          <div className="flex justify-center">
+            {user && !isSaved && (
+              <Button
+                onClick={handleSaveTrip}
+                disabled={isSaving}
+                className="bg-gradient-hero hover:shadow-magical transition-bounce hover:scale-105"
+              >
+                {isSaving ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Heart className="h-4 w-4 mr-2" />
+                    Save Trip
+                  </>
+                )}
+              </Button>
+            )}
+            {isSaved && (
+              <Badge className="bg-green-500 text-white px-4 py-2">
+                <Heart className="h-4 w-4 mr-2 fill-current" />
+                Trip Saved!
+              </Badge>
+            )}
+          </div>
+          <ShareTripPlan tripData={{ ...samplePlan, budget }} />
+        </CardContent>
+      </Card>
     </div>
   );
 };
