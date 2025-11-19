@@ -90,16 +90,19 @@ const WeekendPlannerForm = () => {
 
   if (showPlan) {
     return (
-      <div className="space-y-6" ref={planRef}>
+      <div className="w-full space-y-8" ref={planRef}>
         <TripPlan 
           budget={formData.budget}
           numberOfPeople={formData.numberOfPeople}
           destinationPreference={formData.destinationPreference}
           surpriseMe={formData.surpriseMe}
         />
-        <div className="text-center">
+        <div className="text-center pb-8">
           <Button 
-            onClick={() => setShowPlan(false)}
+            onClick={() => {
+              setShowPlan(false);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
             variant="outline"
             size="lg"
             className="transition-bounce hover:shadow-card hover:scale-105 active:scale-95 animate-fade-in"
