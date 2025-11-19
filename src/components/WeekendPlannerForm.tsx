@@ -90,7 +90,7 @@ const WeekendPlannerForm = () => {
 
   if (showPlan) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-6" ref={planRef}>
         <TripPlan 
           budget={formData.budget}
           numberOfPeople={formData.numberOfPeople}

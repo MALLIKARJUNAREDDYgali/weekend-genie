@@ -245,23 +245,53 @@ const TripPlan = ({ budget, numberOfPeople, destinationPreference, surpriseMe }:
   const perPersonCost = Math.round(totalEstimate / parseInt(numberOfPeople));
 
   const containerVariants = {
-    hidden: { opacity: 0 },
+    hidden: { opacity: 0, y: 100 },
     visible: {
       opacity: 1,
+      y: 0,
       transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2
+        type: "spring" as const,
+        stiffness: 100,
+        damping: 20,
+        staggerChildren: 0.12,
+        delayChildren: 0.15
       }
     }
   };
 
   const cardVariants = {
-    hidden: { opacity: 0, y: 30, scale: 0.95 },
+    hidden: { 
+      opacity: 0, 
+      y: 60,
+      scale: 0.92,
+      rotateX: 15
+    },
     visible: { 
       opacity: 1, 
       y: 0, 
-      scale: 1
+      scale: 1,
+      rotateX: 0,
+      transition: {
+        type: "spring" as const,
+        stiffness: 120,
+        damping: 18,
+        mass: 0.8
+      }
     }
+  };
+
+  const parallaxVariants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: (custom: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring" as const,
+        stiffness: 100,
+        damping: 15,
+        delay: custom * 0.08
+      }
+    })
   };
 
   return (
@@ -270,10 +300,17 @@ const TripPlan = ({ budget, numberOfPeople, destinationPreference, surpriseMe }:
       initial="hidden"
       animate="visible"
       className="space-y-8"
+      style={{ perspective: 1000 }}
     >
       {/* Hero Header with Animated Background */}
-      <motion.div variants={cardVariants}>
-        <Card className="backdrop-blur-sm bg-gradient-card shadow-2xl border-0 overflow-hidden">
+      <motion.div 
+        variants={cardVariants}
+        whileHover={{ 
+          scale: 1.01,
+          transition: { duration: 0.3 }
+        }}
+      >
+        <Card className="backdrop-blur-sm bg-gradient-card shadow-2xl border-0 overflow-hidden hover:shadow-magical transition-shadow duration-300">
           <div className="relative bg-gradient-hero p-8 overflow-hidden">
             {/* Animated particles */}
             <div className="absolute inset-0 overflow-hidden">
