@@ -98,7 +98,7 @@ const WeekendPlannerForm = () => {
             onClick={() => setShowPlan(false)}
             variant="outline"
             size="lg"
-            className="transition-smooth hover:shadow-card"
+            className="transition-bounce hover:shadow-card hover:scale-105 active:scale-95 animate-fade-in"
           >
             Plan Another Trip
           </Button>
@@ -109,7 +109,6 @@ const WeekendPlannerForm = () => {
 
   return (
     <>
-      <TripHistory onSelectTrip={handleHistorySelect} />
       <Card className="w-full max-w-2xl mx-auto backdrop-blur-sm bg-gradient-card shadow-card border-0 animate-fade-in">
       <CardHeader className="text-center pb-6">
         <CardTitle className="text-3xl font-bold bg-gradient-hero bg-clip-text text-transparent">
@@ -139,7 +138,7 @@ const WeekendPlannerForm = () => {
                   placeholder="2000"
                   value={formData.budget}
                   onChange={(e) => handleBudgetChange(e.target.value)}
-                  className="pl-8 h-12 text-lg transition-smooth focus:shadow-glow hover:border-ocean"
+                  className="pl-8 h-12 text-lg transition-bounce focus:shadow-glow hover:border-ocean hover:scale-[1.01] focus:scale-[1.01] animate-input-focus"
                 />
               </div>
               <VoiceInput 
@@ -159,7 +158,7 @@ const WeekendPlannerForm = () => {
               Number of People
             </Label>
             <Select value={formData.numberOfPeople} onValueChange={(value) => setFormData({ ...formData, numberOfPeople: value })}>
-              <SelectTrigger className="h-12 text-lg transition-smooth focus:shadow-glow hover:border-forest">
+              <SelectTrigger className="h-12 text-lg transition-bounce focus:shadow-glow hover:border-forest hover:scale-[1.01] focus:scale-[1.01] animate-fade-in">
                 <SelectValue placeholder="Select number of people" />
               </SelectTrigger>
               <SelectContent>
@@ -186,7 +185,7 @@ const WeekendPlannerForm = () => {
                 value={formData.destinationPreference}
                 onChange={(e) => setFormData({ ...formData, destinationPreference: e.target.value })}
                 disabled={formData.surpriseMe}
-                className="h-12 text-lg transition-smooth focus:shadow-glow hover:border-sunset disabled:opacity-60 flex-1"
+                className="h-12 text-lg transition-bounce focus:shadow-glow hover:border-sunset hover:scale-[1.01] focus:scale-[1.01] disabled:opacity-60 flex-1 animate-input-focus"
               />
               <VoiceInput 
                 onResult={(text) => setFormData({ ...formData, destinationPreference: text })}
@@ -196,12 +195,12 @@ const WeekendPlannerForm = () => {
           </div>
 
           {/* Surprise Me Checkbox */}
-          <div className="flex items-center space-x-3 p-4 rounded-lg bg-gradient-accent/10 border border-accent/20 transition-smooth hover:shadow-subtle hover:border-mountain/40">
+          <div className="flex items-center space-x-3 p-4 rounded-lg bg-gradient-accent/10 border border-accent/20 transition-bounce hover:shadow-subtle hover:border-mountain/40 hover:scale-[1.01] animate-fade-in cursor-pointer">
             <Checkbox
               id="surprise"
               checked={formData.surpriseMe}
               onCheckedChange={handleSurpriseMeChange}
-              className="h-5 w-5"
+              className="h-5 w-5 transition-bounce hover:scale-110"
             />
             <Label 
               htmlFor="surprise" 
@@ -216,7 +215,7 @@ const WeekendPlannerForm = () => {
           <Button
             type="submit"
             disabled={!isFormValid || isSubmitted}
-            className="w-full h-14 text-lg font-semibold bg-gradient-hero hover:shadow-magical transition-bounce hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
+            className="w-full h-14 text-lg font-semibold bg-gradient-hero hover:shadow-magical transition-bounce hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 animate-fade-in"
           >
             {isSubmitted ? (
               <>
@@ -233,6 +232,7 @@ const WeekendPlannerForm = () => {
         </form>
       </CardContent>
     </Card>
+    <TripHistory onSelectTrip={handleHistorySelect} />
     </>
   );
 };

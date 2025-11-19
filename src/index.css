@@ -144,3 +144,38 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom cursor animations for inputs */
+@layer utilities {
+  .animate-input-focus {
+    animation: input-glow 0.3s ease-out;
+  }
+  
+  @keyframes input-glow {
+    0% {
+      box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4);
+    }
+    50% {
+      box-shadow: 0 0 10px 2px hsl(var(--primary) / 0.2);
+    }
+    100% {
+      box-shadow: 0 0 0 0 hsl(var(--primary) / 0);
+    }
+  }
+  
+  /* Animated cursor for text inputs */
+  input[type="text"]:focus,
+  textarea:focus {
+    caret-color: hsl(var(--primary));
+    animation: cursor-pulse 1s infinite;
+  }
+  
+  @keyframes cursor-pulse {
+    0%, 100% {
+      caret-color: hsl(var(--primary));
+    }
+    50% {
+      caret-color: hsl(var(--accent));
+    }
+  }
+}
