@@ -3,13 +3,17 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Star, Quote } from "lucide-react";
 import { useState } from "react";
+import user1Avatar from "@/assets/testimonials/user1.jpg";
+import user2Avatar from "@/assets/testimonials/user2.jpg";
+import user3Avatar from "@/assets/testimonials/user3.jpg";
+import user4Avatar from "@/assets/testimonials/user4.jpg";
 
 const testimonials = [
   {
     id: 1,
     name: "Priya Sharma",
     role: "Solo Traveler",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Priya",
+    avatar: user1Avatar,
     rating: 5,
     text: "Planned my entire Goa trip under ₹5,000! The AI recommendations were spot-on and I discovered amazing local spots I wouldn't have found otherwise. Best travel app ever! 🌴",
     location: "Mumbai"
@@ -18,25 +22,25 @@ const testimonials = [
     id: 2,
     name: "Rahul Verma",
     role: "Weekend Explorer",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rahul",
+    avatar: user2Avatar,
     rating: 5,
     text: "Weekend Genie made planning so easy! Got a perfect itinerary for Manali with hotels, food spots, and activities - all within my budget. Way better than spending hours researching! ⛰️",
     location: "Delhi"
   },
   {
     id: 3,
-    name: "Ananya Patel",
-    role: "Budget Traveler",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ananya",
+    name: "Ananya & Vikram",
+    role: "Budget Travelers",
+    avatar: user3Avatar,
     rating: 5,
-    text: "This AI is magical! ✨ Created a detailed Jaipur itinerary in seconds. The local food recommendations were incredible and the budget breakdown helped me plan everything perfectly!",
+    text: "This AI is magical! ✨ Created a detailed Udaipur itinerary in seconds. The local food recommendations were incredible and the budget breakdown helped us plan everything perfectly!",
     location: "Bangalore"
   },
   {
     id: 4,
-    name: "Karan Singh",
+    name: "Meera Singh",
     role: "Adventure Seeker",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Karan",
+    avatar: user4Avatar,
     rating: 5,
     text: "Used it for 3 trips now and each time it surprises me with new hidden gems. The 'Surprise Me' feature took me to Kerala backwaters - best decision ever! 🚤",
     location: "Pune"
