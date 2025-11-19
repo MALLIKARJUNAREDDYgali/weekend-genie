@@ -95,6 +95,7 @@ const TripPlan = ({ budget, numberOfPeople, destinationPreference, surpriseMe }:
         // Small delay to show 100% before displaying content
         setTimeout(() => {
           setTripData(data);
+          setIsLoading(false);
           toast({
             title: "✨ Trip Plan Generated!",
             description: `Your personalized itinerary for ${data.destination} is ready!`,
@@ -104,13 +105,12 @@ const TripPlan = ({ budget, numberOfPeople, destinationPreference, surpriseMe }:
       } catch (err) {
         console.error('Error generating trip plan:', err);
         setError(err instanceof Error ? err.message : 'Failed to generate trip plan');
+        setIsLoading(false);
         toast({
           title: "Error",
           description: "Failed to generate trip plan. Please try again.",
           variant: "destructive",
         });
-      } finally {
-        setIsLoading(false);
       }
     };
 
