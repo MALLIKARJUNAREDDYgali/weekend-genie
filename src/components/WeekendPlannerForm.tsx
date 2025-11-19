@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,6 +28,11 @@ const WeekendPlannerForm = () => {
     destinationPreference: "",
     surpriseMe: false,
   });
+  const planRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollToPlan = () => {
+    planRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,10 +58,9 @@ const WeekendPlannerForm = () => {
     setTimeout(() => {
       setIsSubmitted(false);
       setShowPlan(true);
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      setTimeout(scrollToPlan, 300);
     }, 2000);
   };
-
   const handleHistorySelect = (trip: any) => {
     setFormData({
       budget: trip.budget,
@@ -65,8 +69,8 @@ const WeekendPlannerForm = () => {
       surpriseMe: trip.surpriseMe,
     });
     setShowPlan(true);
+    setTimeout(scrollToPlan, 300);
   };
-
   const handleBudgetChange = (value: string) => {
     // Only allow numbers
     const numericValue = value.replace(/[^0-9]/g, "");
