@@ -2,6 +2,10 @@ import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, IndianRupee, Sparkles } from "lucide-react";
+import goaBeach from "@/assets/destinations/goa-beach.jpg";
+import manaliMountains from "@/assets/destinations/manali-mountains.jpg";
+import udaipurHeritage from "@/assets/destinations/udaipur-heritage.jpg";
+import bangaloreCity from "@/assets/destinations/bangalore-city.jpg";
 
 const recommendations = [
   {
@@ -9,7 +13,7 @@ const recommendations = [
     destination: "Goa Beaches",
     category: "Beach Paradise",
     estimatedCost: "₹5,000 - ₹8,000",
-    image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800&q=80",
+    image: goaBeach,
     tag: "Best under ₹10,000",
     tagColor: "bg-ocean"
   },
@@ -18,26 +22,26 @@ const recommendations = [
     destination: "Manali Mountains",
     category: "Mountain Escape",
     estimatedCost: "₹8,000 - ₹12,000",
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+    image: manaliMountains,
     tag: "Adventure Special",
     tagColor: "bg-mountain"
   },
   {
     id: 3,
-    destination: "Jaipur Heritage",
+    destination: "Udaipur Heritage",
     category: "Cultural Journey",
     estimatedCost: "₹6,000 - ₹9,000",
-    image: "https://images.unsplash.com/photo-1477586957327-847a0f3f4fe3?w=800&q=80",
+    image: udaipurHeritage,
     tag: "Budget Friendly",
     tagColor: "bg-sunset"
   },
   {
     id: 4,
-    destination: "Kerala Backwaters",
-    category: "Nature Retreat",
+    destination: "Bangalore City",
+    category: "Urban Explorer",
     estimatedCost: "₹7,000 - ₹10,000",
-    image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=800&q=80",
-    tag: "Relaxation Haven",
+    image: bangaloreCity,
+    tag: "Vibrant Culture",
     tagColor: "bg-forest"
   }
 ];
