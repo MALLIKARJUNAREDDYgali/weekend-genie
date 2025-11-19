@@ -48,8 +48,8 @@ const VoiceInput = ({ onResult, placeholder = "Speak now..." }: VoiceInputProps)
   const toggleListening = () => {
     if (!recognition) {
       toast({
-        title: "Not Supported",
-        description: "Voice input is not supported in your browser.",
+        title: "Voice Not Supported",
+        description: "Voice input requires Chrome, Edge, or Safari browser. Please allow microphone access.",
         variant: "destructive",
       });
       return;
@@ -59,12 +59,21 @@ const VoiceInput = ({ onResult, placeholder = "Speak now..." }: VoiceInputProps)
       recognition.stop();
       setIsListening(false);
     } else {
-      recognition.start();
-      setIsListening(true);
-      toast({
-        title: "Listening...",
-        description: placeholder,
-      });
+      try {
+        recognition.start();
+        setIsListening(true);
+        toast({
+          title: "🎤 Listening...",
+          description: placeholder,
+        });
+      } catch (error) {
+        console.error('Failed to start recognition:', error);
+        toast({
+          title: "Microphone Access Required",
+          description: "Please allow microphone access in your browser settings.",
+          variant: "destructive",
+        });
+      }
     }
   };
 
