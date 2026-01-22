@@ -90,10 +90,34 @@ const TripPlan = ({ budget, numberOfPeople, destinationPreference, surpriseMe }:
         clearInterval(progressInterval);
         setLoadingProgress(100);
         
-        setTimeout(() => {
+        setTimeout(async () => {
           setTripData(data);
           setIsLoading(false);
           console.log('TripPlan: data set, should render now', data);
+          
+          // Save to trip_plans table if user is logged in
+          const { data: { user: currentUser } } = await supabase.auth.getUser();
+          if (currentUser) {
+            const today = new Date();
+            const endDate = new Date(today);
+            endDate.setDate(endDate.getDate() + 2); // Weekend = 2 days
+            
+            const { error: insertError } = await (supabase as any).from('trip_plans').insert({
+              user_id: currentUser.id,
+              trip_type: surpriseMe ? 'surprise' : 'planned',
+              destination: data.destination,
+              budget: parseFloat(budget),
+              start_date: today.toISOString().split('T')[0],
+              end_date: endDate.toISOString().split('T')[0],
+            });
+            
+            if (insertError) {
+              console.error('Error saving to trip_plans:', insertError);
+            } else {
+              console.log('Trip saved to trip_plans table successfully');
+            }
+          }
+          
           toast({
             title: "✨ Trip Plan Generated!",
             description: `Your personalized itinerary for ${data.destination} is ready!`,
