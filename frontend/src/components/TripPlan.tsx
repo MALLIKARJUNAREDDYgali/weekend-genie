@@ -6,7 +6,8 @@ import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { ShareTripPlan } from "./ShareTripPlan";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 interface TripPlanProps {
   budget: string;
@@ -38,7 +39,7 @@ interface Activity {
 
 const TripPlan = ({ budget, numberOfPeople, destinationPreference, surpriseMe }: TripPlanProps) => {
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { user, session } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [tripData, setTripData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
@@ -51,7 +52,7 @@ const TripPlan = ({ budget, numberOfPeople, destinationPreference, surpriseMe }:
       try {
         setIsLoading(true);
         setError(null);
-        
+
         const progressInterval = setInterval(() => {
           setLoadingProgress(prev => {
             if (prev >= 90) {
@@ -61,76 +62,51 @@ const TripPlan = ({ budget, numberOfPeople, destinationPreference, surpriseMe }:
             return prev + 10;
           });
         }, 200);
-        
-        console.log('Calling edge function with:', { budget, numberOfPeople, destinationPreference, surpriseMe });
-        
-        const response = await fetch(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-trip-plan`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              budget,
-              numberOfPeople,
-              destinationPreference,
-              surpriseMe,
-            }),
-          }
-        );
+
+        console.log('Calling Express API with:', { budget, numberOfPeople, destinationPreference, surpriseMe });
+
+        const response = await fetch(`${API_URL}/generate/trip-plan`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            budget,
+            numberOfPeople,
+            destinationPreference,
+            surpriseMe,
+          }),
+        });
 
         if (!response.ok) {
-          throw new Error(`Failed to generate trip plan: ${response.status}`);
+          const errData = await response.json().catch(() => ({}));
+          throw new Error(errData.error || `Failed to generate trip plan: ${response.status}`);
         }
 
         const data = await response.json();
         console.log('Received trip data:', data);
-        
+
         clearInterval(progressInterval);
         setLoadingProgress(100);
-        
-        setTimeout(async () => {
+
+        setTimeout(() => {
           setTripData(data);
           setIsLoading(false);
           console.log('TripPlan: data set, should render now', data);
-          
-          // Save to trip_plans table if user is logged in
-          const { data: { user: currentUser } } = await supabase.auth.getUser();
-          if (currentUser) {
-            const today = new Date();
-            const endDate = new Date(today);
-            endDate.setDate(endDate.getDate() + 2); // Weekend = 2 days
-            
-            const { error: insertError } = await (supabase as any).from('trip_plans').insert({
-              user_id: currentUser.id,
-              trip_type: surpriseMe ? 'surprise' : 'planned',
-              destination: data.destination,
-              budget: parseFloat(budget),
-              start_date: today.toISOString().split('T')[0],
-              end_date: endDate.toISOString().split('T')[0],
-            });
-            
-            if (insertError) {
-              console.error('Error saving to trip_plans:', insertError);
-            } else {
-              console.log('Trip saved to trip_plans table successfully');
-            }
-          }
-          
+
           toast({
             title: "✨ Trip Plan Generated!",
             description: `Your personalized itinerary for ${data.destination} is ready!`,
           });
         }, 500);
-        
+
       } catch (err) {
         console.error('Error generating trip plan:', err);
         setError(err instanceof Error ? err.message : 'Failed to generate trip plan');
         setIsLoading(false);
         toast({
           title: "Error",
-          description: "Failed to generate trip plan. Please try again.",
+          description: err instanceof Error ? err.message : "Failed to generate trip plan. Please try again.",
           variant: "destructive",
         });
       }
@@ -140,7 +116,7 @@ const TripPlan = ({ budget, numberOfPeople, destinationPreference, surpriseMe }:
   }, [budget, numberOfPeople, destinationPreference, surpriseMe]);
 
   const handleSaveTrip = async () => {
-    if (!user) {
+    if (!user || !session) {
       toast({
         title: "Sign in required",
         description: "Please sign in to save your trip",
@@ -151,15 +127,23 @@ const TripPlan = ({ budget, numberOfPeople, destinationPreference, surpriseMe }:
 
     try {
       setIsSaving(true);
-      const { error } = await supabase.from('saved_trips').insert({
-        user_id: user.id,
-        destination: tripData.destination,
-        budget,
-        number_of_people: numberOfPeople,
-        trip_data: tripData,
+      const response = await fetch(`${API_URL}/trips`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.token}`,
+        },
+        body: JSON.stringify({
+          destination: tripData.destination,
+          budget,
+          number_of_people: numberOfPeople,
+          trip_data: tripData,
+        }),
       });
 
-      if (error) throw error;
+      if (!response.ok) {
+        throw new Error('Failed to save trip');
+      }
 
       setIsSaved(true);
       toast({
@@ -303,7 +287,7 @@ const TripPlan = ({ budget, numberOfPeople, destinationPreference, surpriseMe }:
             {Object.entries(tripData.meals || {}).map(([day, meals]: [string, any], dayIdx) => (
               <div key={day} className="space-y-3">
                 <h3 className="font-bold text-lg capitalize border-b pb-2">Day {dayIdx + 1}</h3>
-                
+
                 {meals.breakfast && (
                   <div className="p-4 bg-muted rounded-lg">
                     <div className="font-semibold mb-1">🌅 Breakfast - {meals.breakfast.name}</div>
@@ -311,7 +295,7 @@ const TripPlan = ({ budget, numberOfPeople, destinationPreference, surpriseMe }:
                     <p className="text-sm text-muted-foreground">📍 {meals.breakfast.address}</p>
                   </div>
                 )}
-                
+
                 {meals.lunch && (
                   <div className="p-4 bg-muted rounded-lg">
                     <div className="font-semibold mb-1">☀️ Lunch - {meals.lunch.name}</div>
@@ -319,7 +303,7 @@ const TripPlan = ({ budget, numberOfPeople, destinationPreference, surpriseMe }:
                     <p className="text-sm text-muted-foreground">📍 {meals.lunch.address}</p>
                   </div>
                 )}
-                
+
                 {meals.dinner && (
                   <div className="p-4 bg-muted rounded-lg">
                     <div className="font-semibold mb-1">🌙 Dinner - {meals.dinner.name}</div>
