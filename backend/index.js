@@ -9,6 +9,8 @@ const authRoutes = require('./routes/auth');
 const tripRoutes = require('./routes/trips');
 const generateRoutes = require('./routes/generate');
 const historyRoutes = require('./routes/history');
+const imageRoutes = require('./routes/images');
+const reviewRoutes = require('./routes/reviews');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -25,6 +27,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/trips', tripRoutes);
 app.use('/api/generate', generateRoutes);
 app.use('/api/history', historyRoutes);
+app.use('/api/images', imageRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

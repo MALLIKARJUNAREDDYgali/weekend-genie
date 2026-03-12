@@ -1,112 +1,203 @@
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Star, Quote } from "lucide-react";
-import { useState } from "react";
-import user1Avatar from "@/assets/testimonials/user1.jpg";
-import user2Avatar from "@/assets/testimonials/user2.jpg";
-import user3Avatar from "@/assets/testimonials/user3.jpg";
-import user4Avatar from "@/assets/testimonials/user4.jpg";
+import { Star, Quote, MapPin, MessageSquare } from "lucide-react";
+import { useState, useEffect } from "react";
 
-const testimonials = [
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+
+// Static demo testimonials (shown when no user reviews exist)
+const fallbackTestimonials = [
   {
-    id: 1,
-    name: "Priya Sharma",
-    role: "Solo Traveler",
-    avatar: user1Avatar,
+    userName: "Priya Sharma",
+    destination: "Goa",
     rating: 5,
-    text: "Planned my entire Goa trip under ₹5,000! The AI recommendations were spot-on and I discovered amazing local spots I wouldn't have found otherwise. Best travel app ever! 🌴",
-    location: "Mumbai"
+    comment: "Planned my entire Goa trip under ₹5,000! The AI recommendations were spot-on and I discovered amazing local spots! 🌴",
   },
   {
-    id: 2,
-    name: "Rahul Verma",
-    role: "Weekend Explorer",
-    avatar: user2Avatar,
+    userName: "Rahul Verma",
+    destination: "Manali",
     rating: 5,
-    text: "Weekend Genie made planning so easy! Got a perfect itinerary for Manali with hotels, food spots, and activities - all within my budget. Way better than spending hours researching! ⛰️",
-    location: "Delhi"
+    comment: "Weekend Genie made planning so easy! Got a perfect itinerary for Manali with hotels, food spots, and activities. ⛰️",
   },
   {
-    id: 3,
-    name: "Ananya & Vikram",
-    role: "Budget Travelers",
-    avatar: user3Avatar,
+    userName: "Ananya & Vikram",
+    destination: "Udaipur",
     rating: 5,
-    text: "This AI is magical! ✨ Created a detailed Udaipur itinerary in seconds. The local food recommendations were incredible and the budget breakdown helped us plan everything perfectly!",
-    location: "Bangalore"
+    comment: "This AI is magical! ✨ Created a detailed Udaipur itinerary in seconds. The local food recommendations were incredible!",
   },
   {
-    id: 4,
-    name: "Meera Singh",
-    role: "Adventure Seeker",
-    avatar: user4Avatar,
+    userName: "Meera Singh",
+    destination: "Kerala",
     rating: 5,
-    text: "Used it for 3 trips now and each time it surprises me with new hidden gems. The 'Surprise Me' feature took me to Kerala backwaters - best decision ever! 🚤",
-    location: "Pune"
-  }
+    comment: "Used it for 3 trips and each time it surprises me with hidden gems. The 'Surprise Me' feature is the best! 🚤",
+  },
 ];
 
+interface Review {
+  _id?: string;
+  userName: string;
+  destination: string;
+  rating: number;
+  comment: string;
+  budget?: string;
+  numberOfPeople?: string;
+  createdAt?: string;
+}
+
+function getInitials(name: string) {
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+}
+
+function getAvatarColor(name: string) {
+  const colors = [
+    "bg-blue-500", "bg-purple-500", "bg-amber-500", "bg-emerald-500",
+    "bg-pink-500", "bg-indigo-500", "bg-teal-500", "bg-orange-500",
+  ];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return colors[Math.abs(hash) % colors.length];
+}
+
+function timeAgo(dateStr: string) {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const minutes = Math.floor(diff / 60000);
+  if (minutes < 1) return "just now";
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days}d ago`;
+  return `${Math.floor(days / 30)}mo ago`;
+}
+
 export function TestimonialsSection() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const res = await fetch(`${API_URL}/reviews?limit=8`);
+        if (res.ok) {
+          const data = await res.json();
+          setReviews(data);
+        }
+      } catch (err) {
+        console.log("Could not fetch reviews, using fallbacks");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchReviews();
+  }, []);
+
+  // Combine real reviews with fallbacks if not enough real reviews
+  const displayReviews: Review[] = reviews.length >= 4
+    ? reviews.slice(0, 8)
+    : [...reviews, ...fallbackTestimonials.slice(0, Math.max(4 - reviews.length, 0))];
 
   return (
-    <section className="py-16 px-4 bg-background">
-      <div className="container mx-auto">
+    <section className="py-20 px-4 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_hsl(260_60%_50%_/_0.03)_0%,_transparent_60%)]" />
+
+      <div className="container mx-auto relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="text-center mb-14"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Loved by Weekend Adventurers
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4 tracking-wide uppercase">
+            <MessageSquare className="h-3.5 w-3.5" />
+            Traveler Reviews
+          </span>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            Loved by{" "}
+            <span className="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
+              Weekend Adventurers
+            </span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Join thousands of happy travelers who've discovered their perfect weekend getaways
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Real reviews from travelers who planned their perfect trips with Weekend Genie
           </p>
         </motion.div>
 
         <div className="relative max-w-6xl mx-auto">
-          <motion.div 
-            className="grid md:grid-cols-2 gap-6"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, staggerChildren: 0.2 }}
+          <motion.div
+            className="grid md:grid-cols-2 gap-5"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1 } } }}
           >
-            {testimonials.map((testimonial, index) => (
+            {displayReviews.map((review, index) => (
               <motion.div
-                key={testimonial.id}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                key={review._id || `fallback-${index}`}
+                variants={{
+                  hidden: { opacity: 0, x: index % 2 === 0 ? -20 : 20 },
+                  visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
+                }}
               >
-                <Card className="h-full border-0 shadow-card hover:shadow-magical transition-all duration-300 bg-gradient-card">
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-4 mb-4">
-                      <Avatar className="h-14 w-14 border-2 border-primary/20">
-                        <AvatarImage src={testimonial.avatar} />
-                        <AvatarFallback>{testimonial.name[0]}</AvatarFallback>
+                <Card className="h-full border border-border/50 shadow-sm hover:shadow-lg transition-all duration-300 bg-card/80 backdrop-blur-sm rounded-2xl group">
+                  <CardContent className="p-5">
+                    <div className="flex items-start gap-3.5 mb-3.5">
+                      {/* Avatar */}
+                      <Avatar className="h-11 w-11 border-2 border-primary/10 shrink-0">
+                        <AvatarFallback className={`${getAvatarColor(review.userName)} text-white text-sm font-bold`}>
+                          {getInitials(review.userName)}
+                        </AvatarFallback>
                       </Avatar>
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-lg">{testimonial.name}</h4>
-                        <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                        <p className="text-xs text-muted-foreground mt-1">📍 {testimonial.location}</p>
+
+                      {/* User info */}
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-semibold text-[15px] truncate">{review.userName}</h4>
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <span className="flex items-center gap-0.5">
+                            <MapPin className="h-3 w-3" />
+                            {review.destination}
+                          </span>
+                          {review.createdAt && (
+                            <>
+                              <span>·</span>
+                              <span>{timeAgo(review.createdAt)}</span>
+                            </>
+                          )}
+                        </div>
                       </div>
-                      <Quote className="h-8 w-8 text-primary/20" />
+
+                      {/* Quote icon */}
+                      <Quote className="h-6 w-6 text-primary/10 shrink-0 group-hover:text-primary/20 transition-colors" />
                     </div>
-                    
-                    <div className="flex mb-3">
-                      {[...Array(testimonial.rating)].map((_, i) => (
-                        <Star key={i} className="h-4 w-4 fill-sunset text-sunset" />
+
+                    {/* Stars */}
+                    <div className="flex items-center gap-0.5 mb-2.5">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`h-3.5 w-3.5 ${
+                            i < review.rating
+                              ? "fill-amber-400 text-amber-400"
+                              : "text-gray-300 dark:text-gray-600"
+                          }`}
+                        />
                       ))}
+                      {review.budget && (
+                        <span className="ml-2 text-[10px] font-medium text-muted-foreground bg-muted/60 px-2 py-0.5 rounded-full">
+                          ₹{review.budget}
+                        </span>
+                      )}
                     </div>
-                    
-                    <p className="text-muted-foreground leading-relaxed">
-                      {testimonial.text}
+
+                    {/* Comment */}
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      "{review.comment}"
                     </p>
                   </CardContent>
                 </Card>
